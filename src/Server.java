@@ -8,15 +8,19 @@ public class Server {
 
         Socket client = null;
         OutputStreamWriter osw = null;
+        BufferedReader reader = null;
         int t = 0;
         while (true) {
             client = serverSocket.accept();
             osw = new OutputStreamWriter(client.getOutputStream());
+            reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
+
             osw.write("HTTP/1.0 200 OK\n" +
                     "Content-type: text/html\n" +
                     "\n" +
-                    "Hello world!");
-            System.out.println(t++);
+                    "Hello! You are #" + t);
+            String message = reader.readLine();
+            System.out.println("Client #" + ++t + ". Your message: " + message);
             osw.flush();
             osw.close();
         }
